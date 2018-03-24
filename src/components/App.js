@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-
-import {slider} from "../data/feed";
+import PropTypes from "prop-types";
 
 import '../style.css';
 
@@ -10,21 +9,50 @@ class App extends Component {
         currentSlideIndex: 0
     };
 
+    startAutoplay = () => {
+        this.autoplay = setInterval(() => {
+            this.showNextSlide()
+        }, 2000)
+    };
+
+    stopAutoplay = () => {
+        clearInterval(this.autoplay);
+    };
+
     componentDidMount() {
         this.props.onLoad();
+        this.startAutoplay()
     }
 
+    showPrevSlide = () => {
+        const prevSlideIndex = (this.state.currentSlideIndex > 0)
+            ? this.state.currentSlideIndex - 1
+            : this.props.slider.length - 1;
+        this.setState({
+            currentSlideIndex: prevSlideIndex
+        });
+    };
+
+    showNextSlide = () => {
+        this.setState({
+            currentSlideIndex: (this.state.currentSlideIndex+1) % this.props.slider.length
+        });
+    };
+
     renderSlider = () => {
-        const currentSlide = slider[this.state.currentSlideIndex];
+        const currentSlide = this.props.slider[this.state.currentSlideIndex];
         return (
-            <div>
+            <div
+                onMouseEnter={this.stopAutoplay}
+                onMouseLeave={this.startAutoplay}
+            >
                 <img src={`${currentSlide.hero}`} alt=""/>
             </div>
         )
     };
 
     renderSliderOverlay = () => (
-        slider.map((item, index) => {
+        this.props.slider.map((item, index) => {
             return (
                 <div
                     key={index}
@@ -38,20 +66,39 @@ class App extends Component {
     );
 
     render() {
-        console.log('-----------slider,feed', slider);
         return (
-            <div>
+            <div className='slider__wrapper'>
                 <h2>Slider</h2>
-                {this.renderSlider()}
+                {this.props.slider.length > 0 && this.renderSlider()}
                 <h2>SliderOverlay</h2>
-                <div className="slider__overlay">
-                    {this.renderSliderOverlay()}
+                <div
+                    className="slider-overlay"
+                >
+                    <button
+                        onClick={this.showPrevSlide}
+                    >
+                        Prev
+                    </button>
+                    <div className="slider-overlay__imgs">
+                        {this.props.slider.length > 0 && this.renderSliderOverlay()}
+                    </div>
+                    <button
+                        onClick={this.showNextSlide}
+                    >
+                        Next
+                    </button>
                 </div>
-
-
             </div>
         );
     }
+
+    componentWillUnmount() {
+        this.stopAutoplay();
+    }
 }
+
+App.propTypes = {
+    slider: PropTypes.array.isRequired,
+};
 
 export default App;

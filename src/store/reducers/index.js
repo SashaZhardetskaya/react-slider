@@ -1,9 +1,9 @@
 import {combineReducers} from "redux";
 
-import notes from './notesReducer';
+import slider from './sliderReducer';
 
 const reducers = combineReducers({
-    notes
+    slider
 });
 
 export default reducers;

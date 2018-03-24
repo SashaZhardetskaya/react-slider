@@ -1,6 +1,6 @@
 import {connect} from "react-redux";
 import App from '../components/App';
-import * as NotesActions from "../store/actions/NotesActions";
+import * as SliderActions from "../store/actions/SliderActions";
 
 const mapStateToProps = (state) => ({
     ...state,
@@ -8,14 +8,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
     onLoad: () => {
-        dispatch(NotesActions.loadNotes());
+        dispatch(SliderActions.getSlides());
     },
-    onCreateNote: (note) => {
-        dispatch(NotesActions.createNote(note));
-    },
-    onDeleteNote: (note) => {
-        dispatch(NotesActions.deleteNote(note._id));
-    }
 });
 
 export default connect(
