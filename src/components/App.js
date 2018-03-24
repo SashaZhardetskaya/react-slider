@@ -11,6 +11,8 @@ class App extends Component {
         currentSlideIndex: 0
     };
 
+    //Actions
+
     startAutoplay = () => {
         this.autoplay = setInterval(() => {
             this.showNextSlide()
@@ -21,25 +23,41 @@ class App extends Component {
         clearInterval(this.autoplay);
     };
 
-    componentDidMount() {
-        this.props.onLoad();
-        this.startAutoplay()
-    }
-
     showPrevSlide = () => {
+        this.stopAutoplay();
         const prevSlideIndex = (this.state.currentSlideIndex > 0)
             ? this.state.currentSlideIndex - 1
             : this.props.slider.length - 1;
         this.setState({
             currentSlideIndex: prevSlideIndex
         });
+        this.startAutoplay();
     };
 
     showNextSlide = () => {
+        this.stopAutoplay();
         this.setState({
             currentSlideIndex: (this.state.currentSlideIndex+1) % this.props.slider.length
         });
+        this.startAutoplay();
     };
+
+    handleSmallImgClick = (index) => {
+        this.stopAutoplay();
+        this.setState({
+            currentSlideIndex: index
+        });
+        this.startAutoplay();
+    };
+
+    //Lifecycle methods
+
+    componentDidMount() {
+        this.props.onLoad();
+        this.startAutoplay()
+    }
+
+    //Renders
 
     renderSlider = () => {
         const currentSlide = this.props.slider[this.state.currentSlideIndex];
@@ -47,7 +65,9 @@ class App extends Component {
             <div
                 className="main-slide"
             >
-                <h3>{currentSlide.text}</h3>
+                <h2 className="main-slide__title">
+                    {currentSlide.text.replace(/ .*/,'')}
+                </h2>
                 <img
                     src={`${currentSlide.hero}`}
                     onMouseEnter={this.stopAutoplay}
@@ -64,9 +84,13 @@ class App extends Component {
                 <div
                     className="slider-overlay__item"
                     key={index}
-                    onClick={() => this.setState({currentSlideIndex: index})}
+                    onClick={() => this.handleSmallImgClick(index)}
                 >
-                    <img src={`${item.image}`} alt=""/>
+                    <img
+                        className={`slider-overlay__img ${index === this.state.currentSlideIndex && 'active'}`}
+                        src={`${item.image}`}
+                        alt={`${item.text}`}
+                    />
                     <p>{item.text}</p>
                 </div>
             )
@@ -76,7 +100,6 @@ class App extends Component {
     render() {
         return (
             <div className='slider__wrapper'>
-                <h2>Slider</h2>
                 {this.props.slider.length > 0 && this.renderSlider()}
                 <div
                     className="slider-overlay"
@@ -87,7 +110,6 @@ class App extends Component {
                         src={arrowBack}
                         alt="arrow"
                     />
-
                     <div className="slider-overlay__imgs">
                         {this.props.slider.length > 0 && this.renderSliderOverlay()}
                     </div>
