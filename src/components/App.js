@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
 
+import arrowBack from "../assets/back.svg"
+import arrowNext from "../assets/next.svg"
 import '../style.css';
 
 class App extends Component {
@@ -12,7 +14,7 @@ class App extends Component {
     startAutoplay = () => {
         this.autoplay = setInterval(() => {
             this.showNextSlide()
-        }, 2000)
+        }, 10000)
     };
 
     stopAutoplay = () => {
@@ -43,10 +45,15 @@ class App extends Component {
         const currentSlide = this.props.slider[this.state.currentSlideIndex];
         return (
             <div
-                onMouseEnter={this.stopAutoplay}
-                onMouseLeave={this.startAutoplay}
+                className="main-slide"
             >
-                <img src={`${currentSlide.hero}`} alt=""/>
+                <h3>{currentSlide.text}</h3>
+                <img
+                    src={`${currentSlide.hero}`}
+                    onMouseEnter={this.stopAutoplay}
+                    onMouseLeave={this.startAutoplay}
+                    alt={`${currentSlide.text}`}
+                />
             </div>
         )
     };
@@ -55,6 +62,7 @@ class App extends Component {
         this.props.slider.map((item, index) => {
             return (
                 <div
+                    className="slider-overlay__item"
                     key={index}
                     onClick={() => this.setState({currentSlideIndex: index})}
                 >
@@ -70,23 +78,25 @@ class App extends Component {
             <div className='slider__wrapper'>
                 <h2>Slider</h2>
                 {this.props.slider.length > 0 && this.renderSlider()}
-                <h2>SliderOverlay</h2>
                 <div
                     className="slider-overlay"
                 >
-                    <button
+                    <img
+                        className="arrow-icon"
                         onClick={this.showPrevSlide}
-                    >
-                        Prev
-                    </button>
+                        src={arrowBack}
+                        alt="arrow"
+                    />
+
                     <div className="slider-overlay__imgs">
                         {this.props.slider.length > 0 && this.renderSliderOverlay()}
                     </div>
-                    <button
+                    <img
+                        className="arrow-icon"
                         onClick={this.showNextSlide}
-                    >
-                        Next
-                    </button>
+                        src={arrowNext}
+                        alt="arrow"
+                    />
                 </div>
             </div>
         );

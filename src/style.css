@@ -3,9 +3,49 @@
     flex-direction: column;
     align-items: center;
 }
+
+.main-slide {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.main-slide img {
+    transition: all 0.3s ease-in-out;
+}
+
+.main-slide img:hover {
+    box-shadow: 2px 2px 20px -1px rgba(0,0,0,0.47);
+}
+
 .slider-overlay {
     display: flex;
+    justify-content: center;
+    align-items: center;
 }
+
 .slider-overlay__imgs {
     display: flex;
+}
+
+.slider-overlay__item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.slider-overlay__item img {
+    margin: 20px 15px 0 25px;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+.slider-overlay__item img:hover {
+    box-shadow: 2px 2px 20px -1px rgba(0,0,0,0.47);
+}
+
+.arrow-icon {
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
 }
