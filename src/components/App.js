@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import PropTypes from "prop-types";
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import arrowBack from "../assets/back.svg"
 import arrowNext from "../assets/next.svg"
@@ -102,14 +101,7 @@ class App extends Component {
     render() {
         return (
             <div className='slider__wrapper'>
-                <ReactCSSTransitionGroup
-                    transitionName="example"
-                    transitionEnterTimeout={200}
-                    transitionLeave={false}
-                >
-                    {this.props.slider.length > 0 && this.renderSlider()}
-                </ReactCSSTransitionGroup>
-
+                {this.props.slider.length > 0 && this.renderSlider()}
                 <div
                     className="slider-overlay"
                 >
